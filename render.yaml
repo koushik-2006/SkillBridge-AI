@@ -1,0 +1,59 @@
+services:
+  - type: web
+    name: skillbridge-ai-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install --legacy-peer-deps && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: APP_URL
+        value: https://your-backend.onrender.com
+      - key: CORS_ORIGIN
+        value: https://your-frontend.onrender.app
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        value: SkillBridge AI <no-reply@skillbridge.ai>
+      - key: GROQ_API_KEY
+        sync: false
+      - key: HF_API_KEY
+        sync: false
+
+  - type: static
+    name: skillbridge-ai-frontend
+    rootDir: frontend
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://your-backend.onrender.com/api
+
+  - type: psql
+    name: skillbridge-ai-db
+    plan: free
+    databaseName: skillbridge_ai
+    user: skillbridge_ai
